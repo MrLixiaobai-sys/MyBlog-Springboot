@@ -51,7 +51,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static ResponseResult okResult(Object data) {
-        ResponseResult result = setAppHttpCodeEnum(BlogHttpCodeEnum.SUCCESS, BlogHttpCodeEnum.SUCCESS.getMsg());
+        ResponseResult result = setBlogHttpCodeEnum(BlogHttpCodeEnum.SUCCESS, BlogHttpCodeEnum.SUCCESS.getMsg());
         if (data != null) {
             result.setData(data);
         }
@@ -59,18 +59,18 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static ResponseResult errorResult(BlogHttpCodeEnum enums) {
-        return setAppHttpCodeEnum(enums, enums.getMsg());
+        return setBlogHttpCodeEnum(enums, enums.getMsg());
     }
 
     public static ResponseResult errorResult(BlogHttpCodeEnum enums, String msg) {
-        return setAppHttpCodeEnum(enums, msg);
+        return setBlogHttpCodeEnum(enums, msg);
     }
 
-    public static ResponseResult setAppHttpCodeEnum(BlogHttpCodeEnum enums) {
+    public static ResponseResult setBlogHttpCodeEnum(BlogHttpCodeEnum enums) {
         return okResult(enums.getCode(), enums.getMsg());
     }
 
-    private static ResponseResult setAppHttpCodeEnum(BlogHttpCodeEnum enums, String msg) {
+    private static ResponseResult setBlogHttpCodeEnum(BlogHttpCodeEnum enums, String msg) {
         return okResult(enums.getCode(), msg);
     }
 
