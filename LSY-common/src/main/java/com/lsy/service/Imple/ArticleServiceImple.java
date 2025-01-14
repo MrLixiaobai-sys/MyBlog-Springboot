@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.entity.Article;
 import com.lsy.mapper.ArticleMapper;
 import com.lsy.service.ArticleService;
+import com.lsy.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +37,8 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper,Article> impl
         page(page,wrapper);
 //        获取10条查询结果
         List<Article> records = page.getRecords();
-        return ResponseResult.okResult(records);
+
+        List<MostViewArticleVo> vs = BeanCopyUtils.copyBeanList(records, MostViewArticleVo.class);
+        return ResponseResult.okResult(vs);
     }
 }
