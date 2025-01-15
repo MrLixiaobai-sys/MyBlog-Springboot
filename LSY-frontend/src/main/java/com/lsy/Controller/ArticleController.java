@@ -30,7 +30,11 @@ public class ArticleController {
         return articleService.getMostViewsArticle();
     }
 
-
+//    根据分类id查询出对于文章(分页查询)
+    @GetMapping("/articleList")
+    public ResponseResult articleListByCategoryId(Integer categoryId,Integer pageNum,Integer pageSize){
+        return articleService.articleListByCategoryId(categoryId,pageNum,pageSize);
+    }
 
 
 }

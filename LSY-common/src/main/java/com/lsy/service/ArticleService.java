@@ -8,4 +8,6 @@ import com.lsy.domain.entity.Article;
 public interface ArticleService extends IService<Article> {
 //    查询出浏览量最多的10条文章
     ResponseResult getMostViewsArticle();
+
+    ResponseResult articleListByCategoryId(Integer categoryId,Integer pageNum,Integer pageSize);
 }
