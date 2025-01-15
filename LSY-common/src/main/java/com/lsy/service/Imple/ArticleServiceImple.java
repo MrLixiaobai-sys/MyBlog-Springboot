@@ -10,8 +10,10 @@ import com.lsy.domain.Vo.ArticleListVo;
 import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.Vo.PageVo;
 import com.lsy.domain.entity.Article;
+import com.lsy.domain.entity.Category;
 import com.lsy.mapper.ArticleMapper;
 import com.lsy.service.ArticleService;
+import com.lsy.service.CategoryService;
 import com.lsy.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -23,6 +25,9 @@ import java.util.Objects;
 @Service
 public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
+
+    @Autowired
+    private CategoryService categoryService;
     //    获取最多浏览量的10条文章
     @Override
     public ResponseResult getMostViewsArticle() {
@@ -64,10 +69,28 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
 //        将查询条件和分页条件封装到page中
         page(page,ArticleWrapper);
 
-        List<Article> records = page.getRecords();
+        List<Article> articles = page.getRecords();
+//        得到的article实体类里面没有categoryName(前端要求接受的属性)
+
+        //文章表里面的CategoryId在分类表必须要有
+            for (Article article : articles){
+    //        1.得到article里面的分类id
+                Long categoryId1 = article.getCategoryId();
+    //        2.通过分类id查询到分类表里面的name
+                Category category = categoryService.getById(categoryId1);
+    //        3.将得到的name赋值给article里面的categoryName即可
+                if (category != null) {
+                    // 3. 如果存在分类，设置 categoryName
+                    article.setCategoryName(category.getName());
+                } else {
+                    // 如果不存在分类，设置一个默认值或不设置
+                    article.setCategoryName("未分类");
+                }
+            }
+
 
 //        5.封装到Vo中
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(records, ArticleListVo.class);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
 //        6.返回响应结果(显示总条数,分页)
         PageVo pageVo =new PageVo(articleListVos,page.getTotal());
 

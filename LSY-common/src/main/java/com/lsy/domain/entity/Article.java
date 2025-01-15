@@ -2,10 +2,13 @@ package com.lsy.domain.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -29,6 +32,12 @@ public class Article extends Model<Article> {
     private String summary;
     //所属分类id
     private Long categoryId;
+
+    //分类名称
+    //表示映射时表不存在这个属性(无需映射),用于手动设置
+    @TableField(exist = false)
+    private String categoryName;
+
     //缩略图
     private String thumbnail;
     //是否置顶（0否，1是）
