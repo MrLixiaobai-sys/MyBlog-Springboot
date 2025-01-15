@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lsy.constants.ArticleStatus;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.entity.Article;
@@ -26,8 +27,8 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper,Article> impl
 //        通过mybatis-plus的LambdaQueryWrapper查询出浏览量最多的10条文章
         LambdaQueryWrapper<Article> wrapper = new QueryWrapper<Article>().lambda();
 //        查询出正式发布的文章(状态0为正式发布,1为草稿中)
-//        1.增加查询条件:状态为0
-        wrapper.eq(Article::getStatus,0);
+//        1.增加查询条件:状态为0(发布状态)
+        wrapper.eq(Article::getStatus, ArticleStatus.ARTICLE_STATUS_NORMAL);
 //        2.按照浏览量降序
         wrapper.orderByDesc(Article::getViewCount);
 //        3.分页查询,并获取10条数据

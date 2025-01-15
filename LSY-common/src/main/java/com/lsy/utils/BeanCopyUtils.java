@@ -11,6 +11,7 @@ public class BeanCopyUtils {
     private BeanCopyUtils() {
     }
 
+    //单个对象拷贝
     public static <V> V copyBean(Object source,Class<V> clazz) {
         //创建目标对象
         V result = null;
@@ -24,6 +25,8 @@ public class BeanCopyUtils {
         //返回结果
         return result;
     }
+
+    //多对象容器拷贝
     public static <O,V> List<V> copyBeanList(List<O> list, Class<V> clazz){
 //        1.将list<0>类型的转换为Stream流
 //        2.对流中的每个元素o执行拷贝的方法,将o类型转换为V类型

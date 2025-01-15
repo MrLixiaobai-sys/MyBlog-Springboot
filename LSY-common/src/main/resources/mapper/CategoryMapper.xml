@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lsy.mapper.CategoryMapper">
+
+    <select id="selectCategory" resultType="com.lsy.domain.Vo.CategoryVo">
+        select
+            distinct category.name,
+            category.id
+        from category
+            join article on category.id = article.category_id
+                where article.status = 0
+                and category.status = 0
+    </select>
+
+</mapper>
