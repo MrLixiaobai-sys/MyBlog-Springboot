@@ -1,5 +1,6 @@
 package com.lsy.service.Imple;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +30,8 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ArticleService articleService;
     //    获取最多浏览量的10条文章
     @Override
     public ResponseResult getMostViewsArticle() {
@@ -95,5 +99,21 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
         PageVo pageVo =new PageVo(articleListVos,page.getTotal());
 
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        Article article = articleService.getById(id);
+        Long categoryId = article.getCategoryId();
+
+        if(categoryId!=null){
+            String categoryName = categoryService.getById(categoryId).getName();
+            article.setCategoryName(categoryName);
+        }else {
+            article.setCategoryName("未分类");
+        }
+
+        ArticleListVo articleListVo = BeanCopyUtils.copyBean(article,ArticleListVo.class);
+        return ResponseResult.okResult(articleListVo);
     }
 }

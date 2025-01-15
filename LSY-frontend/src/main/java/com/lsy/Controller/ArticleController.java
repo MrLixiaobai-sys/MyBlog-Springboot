@@ -5,6 +5,7 @@ import com.lsy.domain.entity.Article;
 import com.lsy.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,13 @@ public class ArticleController {
     public ResponseResult articleListByCategoryId(Integer categoryId,Integer pageNum,Integer pageSize){
         return articleService.articleListByCategoryId(categoryId,pageNum,pageSize);
     }
+
+//    基于restful风格更加{id}查询出对应文章详情
+    @GetMapping("{id}")
+    public ResponseResult getArticleDetail(@PathVariable Long id){
+        return articleService.getArticleDetail(id);
+    }
+
 
 
 }

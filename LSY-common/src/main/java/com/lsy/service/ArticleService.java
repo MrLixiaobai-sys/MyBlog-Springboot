@@ -10,4 +10,6 @@ public interface ArticleService extends IService<Article> {
     ResponseResult getMostViewsArticle();
 
     ResponseResult articleListByCategoryId(Integer categoryId,Integer pageNum,Integer pageSize);
+
+    ResponseResult getArticleDetail(Long id);
 }

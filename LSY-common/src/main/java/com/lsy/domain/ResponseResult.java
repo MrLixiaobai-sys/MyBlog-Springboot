@@ -8,8 +8,8 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseResult<T> implements Serializable {
     private Integer code;
-    private String msg;
     private T data;
+    private String msg;
 
     public ResponseResult() {
         this.code = BlogHttpCodeEnum.SUCCESS.getCode();
