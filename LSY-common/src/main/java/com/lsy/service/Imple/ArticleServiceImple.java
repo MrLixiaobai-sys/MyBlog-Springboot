@@ -1,12 +1,13 @@
 package com.lsy.service.Imple;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.constants.ArticleStatus;
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.Vo.ArticleDetailVo;
 import com.lsy.domain.Vo.ArticleListVo;
 import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.Vo.PageVo;
@@ -17,7 +18,6 @@ import com.lsy.service.ArticleService;
 import com.lsy.service.CategoryService;
 import com.lsy.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -101,6 +101,8 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
         return ResponseResult.okResult(pageVo);
     }
 
+
+//    获取文章详细(点击阅读全文,显示该文章详细内容)
     @Override
     public ResponseResult getArticleDetail(Long id) {
         Article article = articleService.getById(id);
@@ -113,7 +115,7 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
             article.setCategoryName("未分类");
         }
 
-        ArticleListVo articleListVo = BeanCopyUtils.copyBean(article,ArticleListVo.class);
-        return ResponseResult.okResult(articleListVo);
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article,ArticleDetailVo.class);
+        return ResponseResult.okResult(articleDetailVo);
     }
 }
