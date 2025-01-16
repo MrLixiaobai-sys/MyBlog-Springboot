@@ -15,7 +15,7 @@ public class LinkController {
     private LinkService linkService;
 
 //    获取所有友站信息
-    @GetMapping("/getAllLinks")
+    @GetMapping("/getAllLink")
     public ResponseResult getAllLinks(){
         return linkService.getAllLinks();
     }
