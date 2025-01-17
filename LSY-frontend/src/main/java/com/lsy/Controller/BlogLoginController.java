@@ -36,5 +36,10 @@ public class BlogLoginController {
         return blogLoginService.login(user);
     }
 
+    //退出登录接口
+    @PostMapping("/logout")
+    public ResponseResult logout(){
+        return blogLoginService.logout();
+    }
 
 }

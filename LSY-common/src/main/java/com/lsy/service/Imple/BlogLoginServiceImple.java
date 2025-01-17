@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -73,5 +74,27 @@ public class BlogLoginServiceImple implements BlogLoginService {
 //        将最终token和UserInfoVo封装为BlogUserLoginVo响应格式
         BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token,userInfoVo);
         return ResponseResult.okResult(blogUserLoginVo);
+    }
+
+
+    //退出登录
+    //只需要删除对应缓存就行了
+    @Override
+    public ResponseResult logout() {
+//        1.获取用户信息
+//          Spring Security 提供的工具类，用于存储和获取与当前线程关联的安全上下文（SecurityContext）。
+//          默认情况下，SecurityContext 是与线程绑定的（ThreadLocal）(只能获取当前线程的用户信息)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+//          Principal存储的就是用户对象
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+
+//        2.获取userId
+        Long userId = loginUser.getUser().getId();
+
+//        3.根据userId删除redis里面的用户信息
+        redisCache.deleteObject("bloglogin:"+userId);
+
+        return ResponseResult.okResult();
     }
 }
