@@ -29,7 +29,7 @@ public class AuthUtils {
      * 获取当前登录用户的 UserDetails 信息
      *
      * @return 当前登录用户的 UserDetails
-     * @throws AuthenticationException 如果用户未登录
+     * @throws IllegalStateException 如果用户未登录
      */
     public static LoginUser getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

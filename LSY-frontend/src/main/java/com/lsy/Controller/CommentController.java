@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.constants.CommentStatus;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.entity.Comment;
 import com.lsy.service.CommentService;
@@ -16,7 +17,14 @@ public class CommentController {
     //分页查询当前文章下的评论
     @GetMapping("/commentList")
     public ResponseResult commentList(Long articleId,Integer pageNum,Integer pageSize){
-        return commentService.commentList(articleId,pageNum,pageSize);
+        return commentService.commentList(CommentStatus.ARTICLE_COMMENT_TYPE,articleId,pageNum,pageSize);
+
+    }
+
+    //分页查询友链下的评论
+    @GetMapping("linkCommentList")
+    public ResponseResult linkCommentList(Integer pageNum,Integer pageSize){
+        return commentService.commentList(CommentStatus.LINK_COMMENT_TYPE,null,pageNum,pageSize);
 
     }
 
