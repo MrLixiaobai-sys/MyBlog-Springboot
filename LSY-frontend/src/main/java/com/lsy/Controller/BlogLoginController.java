@@ -2,11 +2,15 @@ package com.lsy.Controller;
 
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.entity.User;
+import com.lsy.enums.BlogHttpCodeEnum;
+import com.lsy.exception.SystemException;
 import com.lsy.service.BlogLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @RestController
 public class BlogLoginController {
@@ -16,7 +20,19 @@ public class BlogLoginController {
 
     //登录接口
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody User user){
+    public ResponseResult login(@RequestBody User user) {
+
+//        登录前校验用户名是否为空
+        if(Objects.isNull(user.getUserName())){
+            throw new SystemException(BlogHttpCodeEnum.REQUIRE_USERNAME);
+        }
+
+        //        登录前校验用户名是否为空
+        if(Objects.isNull(user.getPassword())){
+            throw new SystemException(BlogHttpCodeEnum.REQUIRE_PASSWORD);
+        }
+
+
         return blogLoginService.login(user);
     }
 

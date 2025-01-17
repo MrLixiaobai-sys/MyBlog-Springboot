@@ -1,4 +1,4 @@
-package com.lsy.handle;
+package com.lsy.handle.security;
 
 import com.alibaba.fastjson.JSON;
 import com.lsy.domain.ResponseResult;
