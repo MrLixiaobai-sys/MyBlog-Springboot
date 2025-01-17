@@ -90,6 +90,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
 //        6.如果缓存中存在，存入SecurityContextHolder后续Spring Security 会自动使用这个 authenticationToken 来识别当前用户
+//        principal：用户的身份信息，通常是用户对象或用户名。
+//        credentials：用户的凭证，通常是密码。
+//        authorities：用户的权限集合，用于标识用户的角色和权限
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 

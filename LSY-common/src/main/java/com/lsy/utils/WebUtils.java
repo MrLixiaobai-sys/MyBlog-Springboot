@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 public class WebUtils
 {
     /**
+     * renderString 方法的作用是向客户端直接返回一个 JSON 格式的字符串作为 HTTP 响应
      * 将字符串渲染到客户端
      * 将指定的字符串直接写入 HTTP 响应体中，通常用于返回 JSON 数据
      * 
