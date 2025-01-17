@@ -8,6 +8,8 @@ import com.lsy.domain.ResponseResult;
 import com.lsy.domain.Vo.CommentVo;
 import com.lsy.domain.Vo.PageVo;
 import com.lsy.domain.entity.Comment;
+import com.lsy.enums.BlogHttpCodeEnum;
+import com.lsy.exception.SystemException;
 import com.lsy.mapper.CommentMapper;
 import com.lsy.mapper.UserMapper;
 import com.lsy.service.CommentService;
@@ -74,7 +76,21 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
         return ResponseResult.okResult(pageVo);
     }
 
+    //增加评论
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //判断评论是否未空
+        if(Objects.isNull(comment)){
+            throw new SystemException(BlogHttpCodeEnum.NO_CONTENT);
+        }
 
+        //保存或更新评论 (创建人,创建时间,更新时间等自动生成)
+        save(comment);
+        return ResponseResult.okResult();
+    }
+
+
+    //获取子评论实体类方法
     public List<CommentVo> getChildComment(Long id){
 
 
