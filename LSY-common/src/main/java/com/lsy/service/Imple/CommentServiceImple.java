@@ -32,17 +32,17 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
     private UserMapper userMapper;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(Integer commentType,Long articleId, Integer pageNum, Integer pageSize) {
 
 //        1.根据articleId查询评论
         LambdaQueryWrapper<Comment> commentWrapper = new LambdaQueryWrapper<>();
-        commentWrapper.eq(Comment::getArticleId,articleId);
+        commentWrapper.eq(CommentStatus.ARTICLE_COMMENT_TYPE.equals(commentType),Comment::getArticleId,articleId);
 
-//        2.查询是否有子评论
-//        commentWrapper.eq(Comment::getToCommentId, CommentStatus.TO_COMMENT_USER_ID_NOT_EXIST);
+//        2.根据评论类型查询相关数据
+        commentWrapper.eq(Comment::getType,commentType);
 
 //        3.分页查询
-        Page<Comment> page = new Page<>(articleId,pageNum);
+        Page<Comment> page = new Page<>(pageNum,pageSize);
         page(page,commentWrapper);
 
         List<Comment> comments = page.getRecords();
