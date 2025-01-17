@@ -12,6 +12,21 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
+
+
+
+    /**
+     * UserDetails 包含了用户的基本信息，如用户名、密码、权限等。
+     * getUsername(): 获取用户名。
+     * getPassword(): 获取密码。
+     * getAuthorities(): 获取用户的权限或角色。
+     * isAccountNonExpired(): 检查账户是否过期。
+     * isAccountNonLocked(): 检查账户是否被锁定。
+     * isCredentialsNonExpired(): 检查凭证（密码）是否过期。
+     * isEnabled(): 检查账户是否启用
+     */
+
+
     private User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
