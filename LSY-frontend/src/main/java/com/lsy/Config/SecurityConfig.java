@@ -49,12 +49,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        3.对于登录接口 允许匿名访问 允许未登录的匿名用户访问 /login 接口。
                 .antMatchers("/login").anonymous()
 
+                .antMatchers("/logout").authenticated()
 //        4.jwt过滤器测试用，如果测试没有问题吧这里删除了
                 .antMatchers("/Link/getAllLink").authenticated()
 
 //        5.除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();
-//        6.默认情况下，Spring Security 会提供一个 /logout 接口，用于注销登录,禁用注销功能
+
+//        6.默认情况下，Spring Security 会提供一个 /logout 接口，用于注销登录,禁用注销功能,避免与自定义的logout接口冲突
         http.logout().disable();
 
 //        7.配置异常处理类
