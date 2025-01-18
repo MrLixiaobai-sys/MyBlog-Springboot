@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class AuthUtils {
+public class AuthGetUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthGetUtils.class);
 
     /**
      * 获取当前登录用户的 ID

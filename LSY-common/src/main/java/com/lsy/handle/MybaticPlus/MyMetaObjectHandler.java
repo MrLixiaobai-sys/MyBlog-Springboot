@@ -1,7 +1,7 @@
 package com.lsy.handle.MybaticPlus;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.lsy.utils.AuthUtils;
+import com.lsy.utils.AuthGetUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
 
         // 获取当前登录用户ID并填充创建人,更新人
-        Long userId = AuthUtils.getCurrentUserId();  // 获取当前登录用户的 ID
+        Long userId = AuthGetUtils.getCurrentUserId();  // 获取当前登录用户的 ID
         // 自动填充创建时间
         this.setFieldValByName("createTime", new Date(), metaObject);
 

@@ -7,7 +7,7 @@ import com.lsy.domain.Vo.UserInfoVo;
 import com.lsy.domain.entity.User;
 import com.lsy.mapper.UserMapper;
 import com.lsy.service.UserService;
-import com.lsy.utils.AuthUtils;
+import com.lsy.utils.AuthGetUtils;
 import com.lsy.utils.BeanCopyUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class UserServiceImple extends ServiceImpl<UserMapper, User> implements U
     @Override
     public ResponseResult userInfo() {
         //1.获取userId
-        Long userId = AuthUtils.getCurrentUserId();
+        Long userId = AuthGetUtils.getCurrentUserId();
 
         //2.根据userId查询user信息
         LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();

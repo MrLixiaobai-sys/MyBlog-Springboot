@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        4.jwt过滤器测试用，如果测试没有问题吧这里删除了
 //                .antMatchers("/Link/getAllLink").authenticated()
                 .antMatchers("/user/userInfo").authenticated()
+                .antMatchers("/upload").authenticated()
 
 //        5.除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();

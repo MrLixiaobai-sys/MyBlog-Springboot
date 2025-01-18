@@ -29,7 +29,7 @@ mybatis-plus:
       id-type: auto
 
 
-#oss:
-#  accessKey: daddasd
-#  secretKey: weqeqwe
-#  bucket: sg-blog
+oss:
+  accessKey: eohG5QdWnkv-mNohNp_5mZhnXHsG-lNQn8VSx5BM
+  secretKey: J0xsK4MpDZHhBApmKWUwgq0slL72xYQL5at-tEar
+  bucket: lishuyinblog
