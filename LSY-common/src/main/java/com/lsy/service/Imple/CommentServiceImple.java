@@ -38,10 +38,13 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
         LambdaQueryWrapper<Comment> commentWrapper = new LambdaQueryWrapper<>();
         commentWrapper.eq(CommentStatus.ARTICLE_COMMENT_TYPE.equals(commentType),Comment::getArticleId,articleId);
 
-//        2.根据评论类型查询相关数据
+//        2.只查询父评论(子评论是父评论的属性)
+        commentWrapper.eq(Comment::getToCommentUserId,CommentStatus.TO_COMMENT_USER_ID_NOT_EXIST);
+
+//        3..根据评论类型查询相关数据
         commentWrapper.eq(Comment::getType,commentType);
 
-//        3.分页查询
+//        4.分页查询
         Page<Comment> page = new Page<>(pageNum,pageSize);
         page(page,commentWrapper);
 
