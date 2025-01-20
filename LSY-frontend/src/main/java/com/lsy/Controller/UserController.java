@@ -1,10 +1,13 @@
 package com.lsy.Controller;
 
 import com.lsy.domain.DTO.UserDTO;
+import com.lsy.domain.DTO.UserRegisterDTO;
 import com.lsy.domain.ResponseResult;
 import com.lsy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -23,6 +26,12 @@ public class UserController {
     @PutMapping("/userInfo")
     public ResponseResult updateUserInfo(@RequestBody UserDTO userDTO){
         return userService.updateUserInfo(userDTO);
+    }
+
+    //用户注册
+    @PostMapping("/register")
+    public ResponseResult register(@RequestBody @Valid UserRegisterDTO userRegisterDTO){
+        return userService.register(userRegisterDTO);
     }
 
 }
