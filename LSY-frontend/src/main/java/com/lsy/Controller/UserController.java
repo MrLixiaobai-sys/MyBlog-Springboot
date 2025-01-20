@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.annotation.SystempLog;
 import com.lsy.domain.DTO.UserDTO;
 import com.lsy.domain.DTO.UserRegisterDTO;
 import com.lsy.domain.ResponseResult;
@@ -24,6 +25,7 @@ public class UserController {
 
     //更新个人信息
     @PutMapping("/userInfo")
+    @SystempLog(businessName = "更新用户个人信息")
     public ResponseResult updateUserInfo(@RequestBody UserDTO userDTO){
         return userService.updateUserInfo(userDTO);
     }
