@@ -56,14 +56,14 @@ public class UploadServiceImple implements UploadService {
 
         // 动态生成文件名
 
-        String username = AuthGetUtils.getCurrentUsername();
+//        String username = AuthGetUtils.getCurrentUsername();
 
-        String userId = username; // 示例用户ID
+        String username = "user"; // 示例用户ID
         String date = LocalDate.now().toString(); // 当前日期 (YYYY-MM-DD)
-        String key = String.format("images/%s/%s/avatar_%s.png", date.substring(0, 4), date, userId);
+        String key = String.format("images/%s/%s/avatar_%s.png", date.substring(0, 4), date, username);
 
 //        七牛云存储空间的外链基础域名
-        String domain = "http://sq9k8nt9h.hd-bkt.clouddn.com";
+        String domain = "http://sq9k8nt9h.hd-bkt.clouddn.com//";
 
         try {
 //            获取 MultipartFile 对象的输入流

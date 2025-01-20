@@ -1,11 +1,10 @@
 package com.lsy.Controller;
 
+import com.lsy.domain.DTO.UserDTO;
 import com.lsy.domain.ResponseResult;
 import com.lsy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -19,4 +18,11 @@ public class UserController {
     public ResponseResult userInfo(){
        return userService.userInfo();
     }
+
+    //更新个人信息
+    @PutMapping("/userInfo")
+    public ResponseResult updateUserInfo(@RequestBody UserDTO userDTO){
+        return userService.updateUserInfo(userDTO);
+    }
+
 }
