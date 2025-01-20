@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.annotation.SystempLog;
 import com.lsy.domain.ResponseResult;
 import com.lsy.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class LinkController {
 
 //    获取所有友站信息
     @GetMapping("/getAllLink")
+    @SystempLog(businessName = "获取所有友站信息")
     public ResponseResult getAllLinks(){
         return linkService.getAllLinks();
     }

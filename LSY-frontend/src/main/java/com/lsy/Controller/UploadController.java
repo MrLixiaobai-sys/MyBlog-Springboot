@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.annotation.SystempLog;
 import com.lsy.domain.ResponseResult;
 import com.lsy.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class UploadController {
 
     //上传头像到(中转服务器)七牛OSS
     @PostMapping("/upload")
+    @SystempLog(businessName = "上传头像到七牛OSS")
     public ResponseResult uploadImg(MultipartFile img) throws Exception {
         return uploadService.uploadImg(img);
     }

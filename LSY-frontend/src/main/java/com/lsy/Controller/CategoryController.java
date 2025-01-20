@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.annotation.SystempLog;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.entity.Category;
 import com.lsy.service.CategoryService;
@@ -17,6 +18,7 @@ public class CategoryController {
 
     //获取文章类型
     @GetMapping("/getCategory")
+    @SystempLog(businessName = "获取文章类型")
     public ResponseResult getCategory(){
         return categoryService.getCategory();
     }

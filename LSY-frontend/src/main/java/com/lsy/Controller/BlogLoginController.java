@@ -1,5 +1,6 @@
 package com.lsy.Controller;
 
+import com.lsy.annotation.SystempLog;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.entity.User;
 import com.lsy.enums.BlogHttpCodeEnum;
@@ -20,6 +21,7 @@ public class BlogLoginController {
 
     //登录接口
     @PostMapping("/login")
+    @SystempLog(businessName = "用户登录")
     public ResponseResult login(@RequestBody User user) {
 
 //        登录前校验用户名是否为空
@@ -38,6 +40,7 @@ public class BlogLoginController {
 
     //退出登录接口
     @PostMapping("/logout")
+    @SystempLog(businessName = "用户退出登录")
     public ResponseResult logout(){
         return blogLoginService.logout();
     }

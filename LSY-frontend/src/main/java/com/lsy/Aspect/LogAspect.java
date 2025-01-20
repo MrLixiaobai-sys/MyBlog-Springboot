@@ -54,7 +54,7 @@ public class LogAspect {
         //获取被增强方法上的注解对象
         SystempLog systempLog = getSystempLog(joinPoint);
         log.info(System.lineSeparator());
-        log.info("=========================== Start ===========================");
+        log.info("======================== Start ========================");
 // 打印请求 URL
         log.info("URL : {}",request.getRequestURL());
 // 打印描述信息
