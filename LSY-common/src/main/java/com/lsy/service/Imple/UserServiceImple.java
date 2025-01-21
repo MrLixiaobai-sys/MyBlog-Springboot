@@ -3,8 +3,8 @@ package com.lsy.service.Imple;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lsy.domain.DTO.UserDTO;
-import com.lsy.domain.DTO.UserRegisterDTO;
+import com.lsy.domain.dto.UserDTO;
+import com.lsy.domain.dto.UserRegisterDTO;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.Vo.UserInfoVo;
 import com.lsy.domain.entity.User;
@@ -17,8 +17,6 @@ import com.lsy.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class UserServiceImple extends ServiceImpl<UserMapper, User> implements UserService {

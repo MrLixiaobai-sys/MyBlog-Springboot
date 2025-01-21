@@ -1,8 +1,8 @@
 package com.lsy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lsy.domain.DTO.UserDTO;
-import com.lsy.domain.DTO.UserRegisterDTO;
+import com.lsy.domain.dto.UserDTO;
+import com.lsy.domain.dto.UserRegisterDTO;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.entity.User;
 
