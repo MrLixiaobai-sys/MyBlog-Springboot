@@ -235,4 +235,14 @@ public class RedisCache
     {
         return redisTemplate.keys(pattern);
     }
+
+    /**
+     * 增加缓存中viewCount的值
+     * @param key    Redis 的哈希键
+     * @param hkey   哈希表中的字段键
+     * @param value  是需要递增的值
+     */
+    public void increaseCacheViewCountValue(String key,String hkey,Integer value){
+        redisTemplate.boundHashOps(key).increment(hkey,value);
+    }
 }

@@ -13,10 +13,12 @@ import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.Vo.PageVo;
 import com.lsy.domain.entity.Article;
 import com.lsy.domain.entity.Category;
+import com.lsy.enums.BlogHttpCodeEnum;
 import com.lsy.mapper.ArticleMapper;
 import com.lsy.service.ArticleService;
 import com.lsy.service.CategoryService;
 import com.lsy.utils.BeanCopyUtils;
+import com.lsy.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,8 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
     private CategoryService categoryService;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private RedisCache redisCache;
     //    获取最多浏览量的10条文章
     @Override
     public ResponseResult getMostViewsArticle() {
@@ -106,6 +110,11 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
     @Override
     public ResponseResult getArticleDetail(Long id) {
         Article article = articleService.getById(id);
+//        从redis缓存中获取到该文章的浏览量
+        Integer viewCount = redisCache.getCacheMapValue(ArticleStatus.REDIS_ARTICLE_VIEWCOUNT, String.valueOf(id));
+//        将redis获取得到的浏览量赋值给article的viewCount
+        article.setViewCount(Long.valueOf(viewCount));
+
         Long categoryId = article.getCategoryId();
 
         if(categoryId!=null){
@@ -117,5 +126,12 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
 
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article,ArticleDetailVo.class);
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    //    从redis中更新浏览量
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.increaseCacheViewCountValue(ArticleStatus.REDIS_ARTICLE_VIEWCOUNT, String.valueOf(id), ArticleStatus.INCREATE_ARTICLE_VIEW_COUNT);
+        return ResponseResult.okResult();
     }
 }
