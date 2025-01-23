@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/content/category")
 public class CategoryController {
@@ -22,4 +25,9 @@ public class CategoryController {
     }
 
     //导出分类数据为excel
+    @GetMapping("/export")
+    public void export(HttpServletResponse response){
+
+        categoryService.export(response);
+    }
 }
