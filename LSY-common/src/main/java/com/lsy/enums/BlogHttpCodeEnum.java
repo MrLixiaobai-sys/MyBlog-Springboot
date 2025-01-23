@@ -15,7 +15,8 @@ public enum BlogHttpCodeEnum {
     REQUIRE_PASSWORD(506, "必需填写密码"),
     LOGIN_ERROR(505,"用户名或密码错误"),
     NO_CONTENT(507,"评论不能未空"),
-    NICKNAME_EXIST(508,"昵称已存在");
+    NICKNAME_EXIST(508,"昵称已存在"),
+    USER_NOT_EXIST(509,"用户不存在");
 
     int code;
     String msg;
