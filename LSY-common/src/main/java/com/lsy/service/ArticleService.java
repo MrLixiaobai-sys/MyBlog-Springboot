@@ -3,6 +3,7 @@ package com.lsy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.dto.PostArticleDTO;
 import com.lsy.domain.entity.Article;
 
 public interface ArticleService extends IService<Article> {
@@ -14,4 +15,6 @@ public interface ArticleService extends IService<Article> {
     ResponseResult getArticleDetail(Long id);
 
     ResponseResult updateViewCount(Long id);
+
+    ResponseResult addArticle(PostArticleDTO postArticleDTO);
 }

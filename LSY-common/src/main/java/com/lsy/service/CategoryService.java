@@ -9,4 +9,6 @@ import com.lsy.domain.entity.Category;
 public interface CategoryService extends IService<Category> {
 
     ResponseResult getCategory();
+
+    ResponseResult listAllCategory();
 }

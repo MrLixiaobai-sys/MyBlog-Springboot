@@ -28,3 +28,7 @@ mybatis-plus:
       logic-not-delete-value: 0
       id-type: auto
 
+oss:
+  accessKey: eohG5QdWnkv-mNohNp_5mZhnXHsG-lNQn8VSx5BM
+  secretKey: J0xsK4MpDZHhBApmKWUwgq0slL72xYQL5at-tEar
+  bucket: lishuyinblog

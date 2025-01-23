@@ -4,5 +4,5 @@ import com.lsy.domain.ResponseResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadService {
-     ResponseResult uploadImg(MultipartFile img) throws Exception;
+     ResponseResult uploadImg(MultipartFile img,Integer type) throws Exception;
 }

@@ -20,6 +20,6 @@ public class UploadController {
     @PostMapping("/upload")
     @SystempLog(businessName = "上传头像到七牛OSS")
     public ResponseResult uploadImg(MultipartFile img) throws Exception {
-        return uploadService.uploadImg(img);
+        return uploadService.uploadImg(img,1);
     }
 }

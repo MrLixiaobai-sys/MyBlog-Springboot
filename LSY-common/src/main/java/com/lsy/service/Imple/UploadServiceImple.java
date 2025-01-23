@@ -34,19 +34,19 @@ public class UploadServiceImple implements UploadService {
     private String bucket;
 
     @Override
-    public ResponseResult uploadImg(MultipartFile img) throws Exception {
+    public ResponseResult uploadImg(MultipartFile img,Integer type) throws Exception {
 
 //        1.判断文件合法性
         validateFile(img);
 
 //        2.合法后上传到七牛OSS
-        String url = UpLoad(img);
+        String url = UpLoad(img,type);
         return ResponseResult.okResult(url);
 
     }
 
     //上传OSS方法
-    private String UpLoad(MultipartFile img) throws Exception {
+    private String UpLoad(MultipartFile img,Integer type) throws Exception {
 
         // 构造一个带指定 Region 对象的配置类
         Configuration cfg = new Configuration(Region.region0());
@@ -54,13 +54,15 @@ public class UploadServiceImple implements UploadService {
 
         UploadManager uploadManager = new UploadManager(cfg);
 
-        // 动态生成文件名
+        // 根据传入图片所属类型（头像或者文章缩略图）动态生成文件名
 
 //        String username = AuthGetUtils.getCurrentUsername();
+        String username = (type == 1) ? "user" : (type == 2 ? "article" : null);
 
-        String username = "user"; // 示例用户ID
         String date = LocalDate.now().toString(); // 当前日期 (YYYY-MM-DD)
-        String key = String.format("images/%s/%s/avatar_%s.png", date.substring(0, 4), date, username);
+        String imageName = (type == 1) ? "images/%s/%s/avatar_%s.png" : (type == 2 ? "images/%s/%s/thumbnail_%s.png" : null);
+
+        String key = String.format(imageName, date.substring(0, 4), date, username);
 
 //        七牛云存储空间的外链基础域名
         String domain = "http://sq9k8nt9h.hd-bkt.clouddn.com//";

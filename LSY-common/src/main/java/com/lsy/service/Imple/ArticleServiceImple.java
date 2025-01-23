@@ -11,6 +11,7 @@ import com.lsy.domain.Vo.ArticleDetailVo;
 import com.lsy.domain.Vo.ArticleListVo;
 import com.lsy.domain.Vo.MostViewArticleVo;
 import com.lsy.domain.Vo.PageVo;
+import com.lsy.domain.dto.PostArticleDTO;
 import com.lsy.domain.entity.Article;
 import com.lsy.domain.entity.Category;
 import com.lsy.enums.BlogHttpCodeEnum;
@@ -143,6 +144,14 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
     @Override
     public ResponseResult updateViewCount(Long id) {
         redisCache.increaseCacheViewCountValue(ArticleStatus.REDIS_ARTICLE_VIEWCOUNT, String.valueOf(id), ArticleStatus.INCREATE_ARTICLE_VIEW_COUNT);
+        return ResponseResult.okResult();
+    }
+
+    //    新增文章
+    @Override
+    public ResponseResult addArticle(PostArticleDTO postArticleDTO) {
+        Article article = BeanCopyUtils.copyBean(postArticleDTO, Article.class);
+        articleService.save(article);
         return ResponseResult.okResult();
     }
 
