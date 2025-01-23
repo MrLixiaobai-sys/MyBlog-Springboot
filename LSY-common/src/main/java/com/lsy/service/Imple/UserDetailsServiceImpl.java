@@ -1,11 +1,13 @@
 package com.lsy.service.Imple;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lsy.constants.UserStatus;
 import com.lsy.domain.entity.LoginUser;
 import com.lsy.domain.entity.User;
 import com.lsy.enums.BlogHttpCodeEnum;
 import com.lsy.exception.SystemException;
 import com.lsy.exception.UserNotFoundException;
+import com.lsy.mapper.SysMenuMapper;
 import com.lsy.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -25,6 +28,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private SysMenuMapper SysMenuMapper;
+
     @Override
     public UserDetails loadUserByUsername(String userName) {
 //根据用户名查询用户信息
@@ -36,9 +43,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new SystemException(BlogHttpCodeEnum.USER_NOT_EXIST);
         }
 //返回用户信息
-// TODO 查询权限信息封装
-
-//        返回时调用LoginUser类中的isAccountNonLocked方法,isEnabled方法等方法
-        return new LoginUser(user);
+//      TODO 查询权限信息封装
+//返回用户信息
+        if(user.getType().equals(UserStatus.ADMIN_USER)){
+            List<String> list = SysMenuMapper.selectPermsByUserId(user.getId());
+            return new LoginUser(user,list);
+        }
+        return new LoginUser(user,null);
     }
 }

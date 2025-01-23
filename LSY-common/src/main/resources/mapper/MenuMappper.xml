@@ -72,4 +72,17 @@
         order by m.parent_id,
                  m.order_num
     </select>
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        SELECT
+            DISTINCT m.perms
+        FROM
+            `sys_user_role` ur
+                LEFT JOIN `sys_role_menu` rm ON ur.`role_id` = rm.`role_id`
+                LEFT JOIN `sys_menu` m ON m.`id` = rm.`menu_id`
+        WHERE
+            ur.`user_id` = #{userId} AND
+            m.`menu_type` IN ('C','F') AND
+            m.`status` = 0 AND
+            m.`del_flag` = 0
+    </select>
 </mapper>

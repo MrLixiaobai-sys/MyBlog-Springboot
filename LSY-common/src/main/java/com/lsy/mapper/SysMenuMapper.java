@@ -21,4 +21,6 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
     List<MenuVo> selectRouterTreeByUserId(Long userId);
 
     List<MenuVo> selectChildrenRounterByParentId(Long id);
+
+    List<String> selectPermsByUserId(Long id);
 }
