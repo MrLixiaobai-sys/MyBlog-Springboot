@@ -115,7 +115,7 @@ public class AuthGetUtils {
     //是否是管理员
     public static Boolean isAdmin(){
         Long id = getCurrentUserDetails().getUser().getId();
-        return id != null && 1L == id;
+        return id != null && id.equals(1L);
     }
 
 }

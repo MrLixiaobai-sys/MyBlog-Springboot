@@ -1,10 +1,14 @@
 package com.lsy.service.Imple;
 
+import com.lsy.constants.LoginStatus;
 import com.lsy.domain.ResponseResult;
 import com.lsy.domain.Vo.BlogUserLoginVo;
 import com.lsy.domain.Vo.UserInfoVo;
+import com.lsy.domain.dto.UserLoginDTO;
 import com.lsy.domain.entity.LoginUser;
 import com.lsy.domain.entity.User;
+import com.lsy.enums.BlogHttpCodeEnum;
+import com.lsy.exception.SystemException;
 import com.lsy.service.BlogLoginService;
 import com.lsy.utils.BeanCopyUtils;
 import com.lsy.utils.JwtUtil;
@@ -16,6 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -26,6 +33,7 @@ public class BlogLoginServiceImple implements BlogLoginService {
 
     @Autowired
     private RedisCache redisCache;
+
     @Override
     public ResponseResult login(User user) {
 
@@ -36,7 +44,7 @@ public class BlogLoginServiceImple implements BlogLoginService {
             将用户输入的 username 和 password 封装成一个 UsernamePasswordAuthenticationToken 对象，这是 Spring Security 中标准的认证凭证类。
             这个对象会被传递到认证管理器中，用于后续的认证流程
          */
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
 
         /*
             2. 调用认证管理器进行认证
@@ -45,7 +53,6 @@ public class BlogLoginServiceImple implements BlogLoginService {
             DaoAuthenticationProvider 内部调用了你自定义的 UserDetailsServiceImpl来加载用户数据
             会跳转到UserDetailsServiceImpl进行查询数据库是否有该用户(默认会调用UserDetailsService类进行查询内存,这里重建一个UserDetailsService实现类)
          */
-
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
 //        判断是否认证通过(不通过返回authenticate为null)
@@ -56,7 +63,7 @@ public class BlogLoginServiceImple implements BlogLoginService {
 //            认证通过 
 //        获取到userid并且生成token
 
-        LoginUser loginUser  = (LoginUser) authenticate.getPrincipal();
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         String userId = loginUser.getUser().getId().toString();
         String token = JwtUtil.createJWT(userId);
 
@@ -64,15 +71,15 @@ public class BlogLoginServiceImple implements BlogLoginService {
 //        有缓存时直接通过JWT解析出userId，进行从缓存中查询loginUser即用户信息
 //        LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId)
 
-        redisCache.setCacheObject("bloglogin:"+userId,loginUser);
+        redisCache.setCacheObject(LoginStatus.BLOG_LOGIN + userId, loginUser);
 
 //        把token和userInfo封装
 
 //        User转换为UserInfoVo
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(),UserInfoVo.class);
+        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
 
 //        将最终token和UserInfoVo封装为BlogUserLoginVo响应格式
-        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token,userInfoVo);
+        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);
         return ResponseResult.okResult(blogUserLoginVo);
     }
 
@@ -93,7 +100,55 @@ public class BlogLoginServiceImple implements BlogLoginService {
         Long userId = loginUser.getUser().getId();
 
 //        3.根据userId删除redis里面的用户信息
-        redisCache.deleteObject("bloglogin:"+userId);
+        redisCache.deleteObject(LoginStatus.BLOG_LOGIN + userId);
+
+        return ResponseResult.okResult();
+    }
+
+    //admin登录
+    @Override
+    public ResponseResult AdminLogin(UserLoginDTO userdto) {
+
+//        1.判断是否认证通过
+//          这是认证流程的第一步，将用户输入的用户名和密码封装成 UsernamePasswordAuthenticationToken 对象，作为认证请求
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userdto.getUserName(), userdto.getPassword());
+
+//        AuthenticationManager 是 Spring Security 提供的接口
+//        它的实现类负责将 authenticationToken 传递给相应的 AuthenticationProvider 进行认证
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        if (Objects.isNull(authenticate)) {
+            throw new SystemException(BlogHttpCodeEnum.LOGIN_ERROR);
+        }
+//        2.获取userid生成token
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        String userId = loginUser.getUser().getId().toString();
+        String token = JwtUtil.createJWT(userId);
+        Map<String, String> mapToken = new HashMap<>();
+        mapToken.put("token", token);
+
+//        3.将用户信息存入redis
+        redisCache.setCacheObject(LoginStatus.ADMIN_LOGIN + userId, loginUser);
+
+//        4.把token和userInfo封装为响应格式
+        return ResponseResult.okResult(mapToken);
+    }
+
+    //    admin退出登录
+    @Override
+    public ResponseResult adminLogout() {
+        //        1.获取用户信息
+//          Spring Security 提供的工具类，用于存储和获取与当前线程关联的安全上下文（SecurityContext）。
+//          默认情况下，SecurityContext 是与线程绑定的（ThreadLocal）(只能获取当前线程的用户信息)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+//          Principal存储的就是用户对象
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+
+//        2.获取userId
+        Long userId = loginUser.getUser().getId();
+
+//        3.根据userId删除redis里面的用户信息
+        redisCache.deleteObject(LoginStatus.ADMIN_LOGIN + userId);
 
         return ResponseResult.okResult();
     }

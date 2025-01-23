@@ -1,6 +1,7 @@
 package com.lsy.service;
 
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.dto.UserLoginDTO;
 import com.lsy.domain.entity.User;
 
 public interface BlogLoginService {
@@ -8,4 +9,8 @@ public interface BlogLoginService {
     ResponseResult login(User user);
 
     ResponseResult logout();
+
+    ResponseResult AdminLogin(UserLoginDTO userdto);
+
+    ResponseResult adminLogout();
 }
