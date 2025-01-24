@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface SysMenuService extends IService<SysMenu> {
 
+    ResponseResult Pagelist(String status, String menuName);
+
     ResponseResult getMenuInfo();
 
     List<MenuVo> selectRouterTreeByUserId(Long userId);

@@ -13,6 +13,7 @@ import com.lsy.utils.AuthGetUtils;
 import com.lsy.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Autowired
     private SysRoleMenuMapper sysRoleMenuMapper;
+
+    /*
+        需要展示菜单列表，不需要分页。
+        可以针对菜单名进行模糊查询
+        也可以针对菜单的状态进行查询。
+        菜单要按照父菜单id和orderNum进行排序
+     */
+    @Override
+    public ResponseResult Pagelist(String status, String menuName) {
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(menuName), SysMenu::getMenuName, menuName);
+        queryWrapper.eq(StringUtils.hasText(status), SysMenu::getStatus, status);
+        queryWrapper.orderByAsc(SysMenu::getParentId, SysMenu::getOrderNum);
+        List<SysMenu> sysMenus = sysMenuMapper.selectList(queryWrapper);
+        List<MenuVo> menuVos = BeanCopyUtils.copyBeanList(sysMenus, MenuVo.class);
+        return ResponseResult.okResult(menuVos);
+    }
 
     @Override
     public ResponseResult getMenuInfo() {

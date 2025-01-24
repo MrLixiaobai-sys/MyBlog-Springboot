@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.constants.ArticleStatus;
 import com.lsy.domain.ResponseResult;
-import com.lsy.domain.Vo.ArticleDetailVo;
-import com.lsy.domain.Vo.ArticleListVo;
-import com.lsy.domain.Vo.MostViewArticleVo;
-import com.lsy.domain.Vo.PageVo;
+import com.lsy.domain.Vo.*;
 import com.lsy.domain.dto.PostArticleDTO;
 import com.lsy.domain.entity.Article;
 import com.lsy.domain.entity.Category;
@@ -23,6 +20,7 @@ import com.lsy.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -153,6 +151,21 @@ public class ArticleServiceImple extends ServiceImpl<ArticleMapper, Article> imp
         Article article = BeanCopyUtils.copyBean(postArticleDTO, Article.class);
         articleService.save(article);
         return ResponseResult.okResult();
+    }
+
+    //后台分页查询文章功能，要求能根据标题和摘要**模糊查询**
+    @Override
+    public ResponseResult articleList(Integer pageNum, Integer pageSize, String title, String summary) {
+
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(title), Article::getTitle, title);
+        queryWrapper.like(StringUtils.hasText(summary), Article::getSummary, summary);
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, queryWrapper);
+
+        List<ArticlePageLikeVo> articlePageLikeVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticlePageLikeVo.class);
+
+        return ResponseResult.okResult(new PageVo(articlePageLikeVos, page.getTotal()));
     }
 
     //得到redis中浏览量排序前10的对应的key

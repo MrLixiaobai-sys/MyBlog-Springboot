@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
-//动态路由返回对象
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuVo {
-
+public class MenuByIdVo {
     //菜单ID@TableId
     private Long id;
 
@@ -29,11 +26,6 @@ public class MenuVo {
     //路由地址
     private String path;
 
-    //组件路径
-    private String component;
-
-    //是否为外链（0是 1否）
-    private Integer isFrame;
 
     //菜单类型（M目录 C菜单 F按钮）
     private String menuType;
@@ -44,18 +36,10 @@ public class MenuVo {
     //菜单状态（0正常 1停用）
     private String status;
 
-    //权限标识
-    private String perms;
-
     //菜单图标
     private String icon;
-
-    //子菜单 (当传入数据为空是不返回该字段）
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<MenuVo> children;
 
     //(当传入数据为空是不返回该字段）
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String remark;
-
 }
