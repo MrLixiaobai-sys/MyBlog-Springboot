@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagAddDTO {
-    private String name;
-    private String remark;
+public class RoleStatusDTO {
+    Long roleId;
+    String status;
 }

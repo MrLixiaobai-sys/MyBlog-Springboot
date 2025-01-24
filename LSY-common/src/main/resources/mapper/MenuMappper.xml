@@ -85,4 +85,7 @@
             m.`status` = 0 AND
             m.`del_flag` = 0
     </select>
+    <select id="selectRounterTreeAddRoleById" resultType="java.lang.String">
+
+    </select>
 </mapper>

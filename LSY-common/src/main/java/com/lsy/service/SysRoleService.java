@@ -1,5 +1,7 @@
 package com.lsy.service;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lsy.domain.ResponseResult;
+import com.lsy.domain.dto.RoleStatusDTO;
 import com.lsy.domain.entity.SysRole;
 
 /**
@@ -10,4 +12,7 @@ import com.lsy.domain.entity.SysRole;
  */
 public interface SysRoleService extends IService<SysRole> {
 
+    ResponseResult pageByCondition(String roleName, String status, Integer pageNum, Integer pageSize);
+
+    ResponseResult changeStatus(RoleStatusDTO roleStatusDTO);
 }

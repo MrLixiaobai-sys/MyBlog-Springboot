@@ -1,6 +1,7 @@
 package com.lsy.Controller;
 
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.Vo.MenuAddRoleVo;
 import com.lsy.domain.Vo.MenuByIdVo;
 import com.lsy.domain.Vo.MenuVo;
 import com.lsy.domain.Vo.RoutersVo;
@@ -75,5 +76,13 @@ public class MenuController {
     public ResponseResult deleteMenu(@PathVariable Long menuId){
         sysMenuService.removeById(menuId);
         return ResponseResult.okResult();
+    }
+
+    //获取菜单树
+    @GetMapping("/treeselect")
+    public ResponseResult getMenuTree(){
+        Long userId = AuthGetUtils.getCurrentUserId();
+        List<MenuAddRoleVo> menuAddRoleVos = sysMenuService.selectRounterTreeAddRoleById(userId);
+        return ResponseResult.okResult(menuAddRoleVos);
     }
 }

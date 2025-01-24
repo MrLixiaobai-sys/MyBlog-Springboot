@@ -1,6 +1,7 @@
 package com.lsy.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lsy.domain.ResponseResult;
 import com.lsy.domain.Vo.MenuVo;
 import com.lsy.domain.entity.SysMenu;
 
@@ -23,4 +24,6 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
     List<MenuVo> selectChildrenRounterByParentId(Long id);
 
     List<String> selectPermsByUserId(Long id);
+
+    List<String> selectRounterTreeAddRoleById(Long userId);
 }

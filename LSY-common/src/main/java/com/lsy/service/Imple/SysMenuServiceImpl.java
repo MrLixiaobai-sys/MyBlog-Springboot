@@ -3,6 +3,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.domain.ResponseResult;
+import com.lsy.domain.Vo.MenuAddRoleVo;
 import com.lsy.domain.Vo.MenuInfoVo;
 import com.lsy.domain.Vo.MenuVo;
 import com.lsy.domain.Vo.UserInfoVo;
@@ -11,13 +12,16 @@ import com.lsy.mapper.*;
 import com.lsy.service.SysMenuService;
 import com.lsy.utils.AuthGetUtils;
 import com.lsy.utils.BeanCopyUtils;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 菜单权限表(SysMenu)表服务实现类
@@ -130,6 +134,26 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return menuVos;
     }
 
+//    新增角色时能够直接设置角色所关联的菜单权限。
+    @Override
+    public List<MenuAddRoleVo> selectRounterTreeAddRoleById(Long userId) {
+
+        List<MenuVo> menuVos = null;
+//        判断是否为管理员
+//          管理员则查询出所有菜单已经子菜单
+//          否则根据当前用户id查询出菜单列表
+        if(AuthGetUtils.isAdmin()){
+            menuVos = sysMenuMapper.selectAllRouterTree();
+        }else {
+            menuVos = sysMenuMapper.selectRouterTreeByUserId(userId);
+        }
+
+//        构建菜单树
+        List<MenuAddRoleVo> menuAddRoleVos = buildMenuTree(menuVos);
+
+        return menuAddRoleVos;
+    }
+
     //    返回管理员的菜单列表
     public ResponseResult getAdminMenuList(UserInfoVo userInfoVo){
 
@@ -144,4 +168,31 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .collect(Collectors.toList());
         return ResponseResult.okResult(new MenuInfoVo(userInfoVo, permissions, roles));
     }
+
+    //    构建菜单树
+    public List<MenuAddRoleVo> buildMenuTree(List<MenuVo> menuVos) {
+
+        List<MenuAddRoleVo> menuAddRoleVos = BeanCopyUtils.copyBeanList(menuVos, MenuAddRoleVo.class);
+
+//        将menuVos里面的menuName赋值给label
+        setLabelMenuName(menuVos, menuAddRoleVos);
+
+//        对返回的menuVos进行children进行遍历赋值（子菜单也是一样的List<MenuVo>类型）
+        for (MenuAddRoleVo menuAddRoleVo : menuAddRoleVos) {
+            List<MenuVo> children = sysMenuMapper.selectChildrenRounterByParentId(menuAddRoleVo.getId());
+            List<MenuAddRoleVo> menuAddRoleVos1 = BeanCopyUtils.copyBeanList(children, MenuAddRoleVo.class);
+            setLabelMenuName(children, menuAddRoleVos1);
+            menuAddRoleVo.setChildren(menuAddRoleVos1);
+        }
+        return menuAddRoleVos;
+    }
+
+//        将menuVos里面的menuName赋值给label
+    public void setLabelMenuName(List<MenuVo> menuVos, List<MenuAddRoleVo> menuAddRoleVos) {
+//        使用 Streams API 和 forEach 对映射对象进行额外字段设置
+        IntStream.range(0, menuVos.size()).forEach(i ->
+                menuAddRoleVos.get(i).setLabel(menuVos.get(i).getMenuName())
+        );
+    }
+
 }
