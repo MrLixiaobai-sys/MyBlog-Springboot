@@ -39,23 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
-//        1.关闭csrf
+                //关闭csrf
                 .csrf().disable()
-//        2.不通过Session获取SecurityContext
+                //不通过Session获取SecurityContext
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//        3.对于登录接口 允许匿名访问 允许未登录的匿名用户访问 /login 接口。
-                .antMatchers("/user/login").anonymous()
-//                .antMatchers("/logout").authenticated()
-//        4.jwt过滤器测试用，如果测试没有问题吧这里删除了
-//                .antMatchers("/Link/getAllLink").authenticated()
-//                .antMatchers("/user/userInfo").authenticated()
+                // 对于登录接口 允许匿名访问
+                .antMatchers("/login").anonymous()
+                //注销接口需要认证才能访问
+                .antMatchers("/logout").authenticated()
+                .antMatchers("/user/userInfo").authenticated()
 //                .antMatchers("/upload").authenticated()
-
-//        5.除上面外的所有请求全部不需要认证即可访问
-                .anyRequest().authenticated();
+                // 除上面外的所有请求全部不需要认证即可访问
+                .anyRequest().permitAll();
 
 //        6.默认情况下，Spring Security 会提供一个 /logout 接口，用于注销登录,禁用注销功能,避免与自定义的logout接口冲突
         http.logout().disable();
