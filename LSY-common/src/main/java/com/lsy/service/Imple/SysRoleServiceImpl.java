@@ -10,6 +10,7 @@ import com.lsy.domain.entity.SysRole;
 import com.lsy.mapper.SysRoleMapper;
 import com.lsy.service.SysRoleService;
 import com.lsy.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +24,12 @@ import java.util.List;
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
 
     /*
@@ -54,5 +61,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         SysRole sysRole = BeanCopyUtils.copyBean(roleStatusDTO, SysRole.class);
         updateById(sysRole);
         return ResponseResult.okResult();
+    }
+
+    //    查询所有角色列表
+    @Override
+    public ResponseResult listAllRole() {
+        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
+
+//        查询的是所有状态正常的角色
+        queryWrapper.eq(SysRole::getStatus, "0");
+        List<SysRole> list = list(queryWrapper);
+        return ResponseResult.okResult(list);
     }
 }

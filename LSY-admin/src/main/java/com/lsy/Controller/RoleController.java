@@ -64,6 +64,12 @@ public class RoleController {
         sysRoleService.removeById(id);
         return ResponseResult.okResult();
     }
+//    查询角色列表接口
+    @GetMapping("/listAllRole")
+    public ResponseResult listAllRole() {
+        return sysRoleService.listAllRole();
+    }
+
 
 
 }

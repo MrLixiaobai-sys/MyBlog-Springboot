@@ -15,4 +15,6 @@ public interface SysRoleService extends IService<SysRole> {
     ResponseResult pageByCondition(String roleName, String status, Integer pageNum, Integer pageSize);
 
     ResponseResult changeStatus(RoleStatusDTO roleStatusDTO);
+
+    ResponseResult listAllRole();
 }
