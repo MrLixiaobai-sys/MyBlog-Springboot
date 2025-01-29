@@ -23,4 +23,6 @@ public interface SysMenuService extends IService<SysMenu> {
     List<MenuVo> selectRouterTreeByUserId(Long userId);
 
     List<MenuAddRoleVo> selectRounterTreeAddRoleById(Long userId);
+
+    ResponseResult getMenuTreeByRoleId(Long roleId);
 }

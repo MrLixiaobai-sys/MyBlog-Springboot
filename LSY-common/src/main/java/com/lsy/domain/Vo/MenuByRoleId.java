@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.ALWAYS)
-public class MenuAddRoleVo {
-    private Long id;
-
-    //父菜单ID
-    private Long parentId;
-
-    //菜单名称
-    private String label;
+public class MenuByRoleId {
 
     //子菜单
-    private List<MenuAddRoleVo> children = new ArrayList<>();
+    private List<MenuAddRoleVo> menus = new ArrayList<>();
 
-
+    //菜单id列表
+    private List<String> checkedKeys;
 }

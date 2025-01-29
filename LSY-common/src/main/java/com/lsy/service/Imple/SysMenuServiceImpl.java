@@ -3,10 +3,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.domain.ResponseResult;
-import com.lsy.domain.Vo.MenuAddRoleVo;
-import com.lsy.domain.Vo.MenuInfoVo;
-import com.lsy.domain.Vo.MenuVo;
-import com.lsy.domain.Vo.UserInfoVo;
+import com.lsy.domain.Vo.*;
 import com.lsy.domain.entity.*;
 import com.lsy.mapper.*;
 import com.lsy.service.SysMenuService;
@@ -154,6 +151,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return menuAddRoleVos;
     }
 
+
+    //    根据角色id查询对应菜单列表
+    @Override
+    public ResponseResult getMenuTreeByRoleId(Long roleId) {
+
+//        1.判断是否为管理员
+        List<MenuAddRoleVo> menuAddRoleVos = null;
+
+//        2.查询出当前角色的菜单id列表(管理员直接查询所有的菜单列表)
+        List<String> menuIds = getMenuIdsByRoleId(roleId);
+
+        if(roleId.equals(1L)){
+            List<MenuVo> menuVos = sysMenuMapper.selectAllRouterTree();
+            menuAddRoleVos = buildMenuTree(menuVos);
+        }else {
+
+
+//        3.查询出当前角色的菜单列表
+            List<MenuVo> MenuVos = sysMenuMapper.selectRounterTreeByRoleId(roleId);
+            menuAddRoleVos = buildMenuTree(MenuVos);
+
+        }
+
+
+
+//        4.将菜单id列表进行封装到MenuByRoleId
+        MenuByRoleId menuByRoleId = new MenuByRoleId(menuAddRoleVos,menuIds);
+
+
+        return ResponseResult.okResult(menuByRoleId);
+    }
+
+
     //    返回管理员的菜单列表
     public ResponseResult getAdminMenuList(UserInfoVo userInfoVo){
 
@@ -194,5 +224,28 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 menuAddRoleVos.get(i).setLabel(menuVos.get(i).getMenuName())
         );
     }
+
+    //查询出当前角色的菜单Id列表
+    public List<String> getMenuIdsByRoleId(Long roleId) {
+        List<SysRoleMenu> sysRoleMenus;
+
+        if (roleId == 1L) {
+            // 如果 roleId 是 1，查询所有菜单(管理员）
+            sysRoleMenus = sysRoleMenuMapper.selectAdminMenuIds();
+        } else {
+            // 否则，查询对应 roleId 的菜单
+            sysRoleMenus = sysRoleMenuMapper.selectList(
+                    new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId)
+            );
+        }
+        // 将查询结果中的 menuId 从 Long 类型转换为 String 类型
+        List<String> menuIds = sysRoleMenus.stream()
+                .map(sysRoleMenu -> String.valueOf(sysRoleMenu.getMenuId())) // 将 Long 转换为 String
+                .collect(Collectors.toList());
+
+        return menuIds;
+    }
+
+
 
 }

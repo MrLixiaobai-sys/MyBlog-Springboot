@@ -85,4 +85,11 @@ public class MenuController {
         List<MenuAddRoleVo> menuAddRoleVos = sysMenuService.selectRounterTreeAddRoleById(userId);
         return ResponseResult.okResult(menuAddRoleVos);
     }
+
+    //加载对应角色菜单列表树
+    @GetMapping("/roleMenuTreeselect/{id}")
+    public ResponseResult getRoleMenuTree(@PathVariable("id") Long roleId){
+        return sysMenuService.getMenuTreeByRoleId(roleId);
+    }
+
 }
