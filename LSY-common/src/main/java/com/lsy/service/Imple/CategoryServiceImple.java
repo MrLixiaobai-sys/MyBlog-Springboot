@@ -4,11 +4,12 @@ package com.lsy.service.Imple;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lsy.domain.ResponseResult;
-import com.lsy.domain.Vo.AllCategoryVo;
-import com.lsy.domain.Vo.CategoryVo;
-import com.lsy.domain.Vo.ExcelCategoryVo;
+import com.lsy.domain.Vo.*;
+import com.lsy.domain.dto.CategoryListDTO;
 import com.lsy.domain.entity.Category;
 
 import com.lsy.enums.BlogHttpCodeEnum;
@@ -18,6 +19,7 @@ import com.lsy.utils.BeanCopyUtils;
 import com.lsy.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -67,5 +69,22 @@ public class CategoryServiceImple extends ServiceImpl<CategoryMapper,Category> i
             ResponseResult result = ResponseResult.errorResult(BlogHttpCodeEnum.SYSTEM_ERROR);
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
+    }
+
+    /*
+         需要分页查询分类列表。
+         能根据分类名称进行模糊查询。
+         能根据状态进行查询
+     */
+    @Override
+    public ResponseResult listCategory(CategoryListDTO categoryListDTO) {
+
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(categoryListDTO.getName()), Category::getName, categoryListDTO.getName());
+        queryWrapper.eq(StringUtils.hasText(categoryListDTO.getStatus()), Category::getStatus, categoryListDTO.getStatus());
+        Page<Category> page = new Page<>();
+        page(page, queryWrapper);
+        List<CategoryListVo> categoryListVos = BeanCopyUtils.copyBeanList(page.getRecords(), CategoryListVo.class);
+        return ResponseResult.okResult(new PageVo(categoryListVos, page.getTotal()));
     }
 }
