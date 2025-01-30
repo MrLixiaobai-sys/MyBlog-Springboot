@@ -65,11 +65,13 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
 
             //对昵称和回复昵称进行赋值
             String nickName = userMapper.selectById(commentVo.getCreateBy()).getNickName();
+            commentVo.setAvatar(userMapper.selectById(commentVo.getCreateBy()).getAvatar());
             commentVo.setNickName(nickName);
 
             if(commentVo.getToCommentUserId()!=-1){
                 String toNickName = userMapper.selectById(commentVo.getToCommentUserId()).getNickName();
                 commentVo.setToCommentNickName(toNickName);
+                commentVo.setAvatar(userMapper.selectById(commentVo.getCreateBy()).getAvatar());
             }
 
         }
@@ -92,6 +94,12 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
         return ResponseResult.okResult();
     }
 
+    //获取评论人头像及昵称
+    @Override
+    public ResponseResult getCommentInfo() {
+        return null;
+    }
+
 
     //获取子评论实体类方法
     public List<CommentVo> getChildComment(Long id){
@@ -106,6 +114,12 @@ public class CommentServiceImple extends ServiceImpl<CommentMapper, Comment> imp
             List<Comment> commentList = commentMapper.selectList(lambdaQueryWrapper);
 
             List<CommentVo> commentVo = BeanCopyUtils.copyBeanList(commentList,CommentVo.class);
+            for (CommentVo commentVo1 : commentVo){
+                String nickName = userMapper.selectById(commentVo1.getCreateBy()).getNickName();
+                commentVo1.setNickName(nickName);
+                commentVo1.setAvatar(userMapper.selectById(commentVo1.getCreateBy()).getAvatar());
+            }
+
 
             return commentVo;
 

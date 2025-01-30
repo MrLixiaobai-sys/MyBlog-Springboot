@@ -47,6 +47,14 @@ public class CommentController {
 
     }
 
+    //获取评论头像及信息（评论展示头像和昵称）
+    @GetMapping("/getCommentInfo")
+    @SystempLog(businessName = "获取评论头像及信息")
+    @ApiOperation(value = "获取评论头像及信息",notes = "获取评论头像及信息")
+    public ResponseResult getCommentInfo(){
+        return commentService.getCommentInfo();
+    }
+
     //发表评论
     @PostMapping
     @SystempLog(businessName = "发表评论")

@@ -45,7 +45,7 @@ public class UserController {
     }
 
     //分页查询用户列表(支持模糊查询）
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseResult listUser(@RequestBody UserListDTO userListDTO){
 
         return UserService.listUser(userListDTO);

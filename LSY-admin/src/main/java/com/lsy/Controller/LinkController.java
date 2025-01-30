@@ -18,7 +18,7 @@ public class LinkController {
     private LinkService linkService;
 
 //    分页查询友链列表(支持模糊查询)
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseResult list(@RequestBody LinkListDTO linkListDTO) {
 
         return linkService.pageLink(linkListDTO);
